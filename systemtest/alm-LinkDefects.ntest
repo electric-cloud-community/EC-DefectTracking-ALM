@@ -1,0 +1,204 @@
+# -*-Perl-*-
+
+# alm-LinkDefects.ntest -
+#
+# Exercise procedure LinkDefects in EC-DefectTracking-ALM
+#
+# Copyright (c) 2005-2010 Electric Cloud, Inc.
+# All rights reserved
+
+use strict;
+use ECTest;
+use ECSelenium;
+
+# read in setup and tests that are common to all EC-DefectTracking plugins 
+# system tests
+require "$::gTestFileDir/../../EC-DefectTracking/systemtest/ntest.common";
+
+ntest "cfgDoesNotExist", {}, sub {
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdcfgDoesNotExist();
+
+    writeFile("$::gCurrentTestDir/cfgDoesNotExist.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Could not find configuration cfgDoesNotExist", $data, "cfgDoesNotExist output");
+};
+
+sub runFakeCmdcfgDoesNotExist
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for cfgDoesNotExist ...
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Could not find configuration cfgDoesNotExist";
+    
+    return $log;
+}
+
+ntest "noDefaultProperty", {}, sub {
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdrunFakeCmdnoDefaultProperty();
+
+    writeFile("$::gCurrentTestDir/noDefaultProperty.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("No defect IDs found, returning", $data, "noDefaultProperty output");
+};
+
+sub runFakeCmdrunFakeCmdnoDefaultProperty
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for qc ...
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Parsing property /myJob/ecscm_changeLogs for defect IDs
+Error querying for /myJob/ecscm_changeLogs as a property sheet: error [NoSuchProperty]: Invalid property path: Evaluating property '/myJob/ecscm_changeLogs' in jobStep 'runMethod'
+Found job 'job_8892_201008191056'
+Failed to find property 'ecscm_changeLogs'
+Evaluation failed
+Details:
+Evaluating property '/myJob/ecscm_changeLogs' in jobStep 'runMethod'
+Found job 'job_8892_201008191056'
+Failed to find property 'ecscm_changeLogs'
+Evaluation failed
+Trying to query for /myJob/ecscm_changeLogs as property...
+Error querying for /myJob/ecscm_changeLogs as a property: error [NoSuchProperty]: Property '/myJob/ecscm_changeLogs' does not exist
+Details:
+Evaluating property '/myJob/ecscm_changeLogs' in jobStep 'runMethod'
+Found job 'job_8892_201008191056'
+Failed to find property 'ecscm_changeLogs'
+Evaluation failed
+
+No defect IDs found, returning
+action linkDefects returned:";
+    
+    return $log;
+}
+
+ntest "emptyDefaultProperty", {}, sub {
+    
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdemptyDefaultProperty();
+
+    writeFile("$::gCurrentTestDir/emptyDefaultProperty.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("No change logs found, returning", $data, "emptyDefaultProperty-logs output");
+    assertSubstring("No defect IDs found, returning", $data, "emptyDefaultProperty-ids output");
+
+};
+
+sub runFakeCmdemptyDefaultProperty
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for qc ...
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Parsing property /myJob/ecscm_changeLogs for defect IDs
+Error querying for /myJob/ecscm_changeLogs as a property sheet: error [InvalidPropertyValue]: Incorrect object type at '/myJob/ecscm_changeLogs': string[ecscm_changeLogs=,id=112905]
+Trying to query for /myJob/ecscm_changeLogs as property...
+No change logs found, returning
+No defect IDs found, returning
+action linkDefects returned:";
+    
+    return $log;
+}
+
+ntest "emptyPropertiesInDefaultPropertySheet", {}, sub {
+   
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdemptyPropertiesInDefaultPropertySheet();
+
+    writeFile("$::gCurrentTestDir/emptyPropertiesInDefaultPropertySheet.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("No change logs found, returning", $data, "emptyPropertiesInDefaultPropertySheet-logs output");
+    assertSubstring("No defect IDs found, returning", $data, "emptyPropertiesInDefaultPropertySheet-ids output");
+
+};
+
+sub runFakeCmdemptyPropertiesInDefaultPropertySheet
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for qc ...
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Parsing property /myJob/ecscm_changeLogs for defect IDs
+No change logs found, returning
+No defect IDs found, returning
+action linkDefects returned:";
+    
+    return $log;
+}
+
+ntest "defaultPropertyContainsInaccessibleDefectIDs", {}, sub {
+  
+    # Read the log file and verify its contents.
+    my $data = runFakeCmddefaultPropertyContainsInaccessibleDefectIDs();
+
+    writeFile("$::gCurrentTestDir/defaultPropertyContainsInaccessibleDefectIDs.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Key: 99 Name: Bug ID: 99 does not exist", $data, "defaultPropertyContainsInaccessibleDefectIDs output");
+};
+
+sub runFakeCmddefaultPropertyContainsInaccessibleDefectIDs
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for qc ...
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Parsing property /myJob/ecscm_changeLogs for defect IDs
+Error querying for /myJob/ecscm_changeLogs as a property sheet: error [InvalidPropertyValue]: Incorrect object type at '/myJob/ecscm_changeLogs': string[ecscm_changeLogs=aaa-111,id=112929]
+Trying to query for /myJob/ecscm_changeLogs as property...
+Using default pattern to search for defect IDs
+Found defect ID: BUG-99
+Key: 99 Name: Bug ID: 99 does not exist
+Key: BUG-99 Name: 
+action linkDefects returned: 0";
+    
+    return $log;
+}
+
+ntest "customPrefix", {}, sub {
+   
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdcustomPrefix();
+
+    writeFile("$::gCurrentTestDir/jobDetails.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring('Using supplied prefix=BUG- to search for defects IDs', $data,"customPrefix-prefix output");
+    assertSubstring(outdent('
+           |Found defect ID: BUG-1
+            Found defect ID: BUG-2
+            Found defect ID: BUG-99
+            '), $data, "customPrefix-ids output");
+
+    assertSubstring("Creating link /commander/pages/EC-DefectTracking-QC-", $data, "customPrefix-link output");
+};
+
+sub runFakeCmdcustomPrefix
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for default ...
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Parsing property /myJob/ecscm_changeLogs for defect IDs
+Error querying for /myJob/ecscm_changeLogs as a property sheet: error [InvalidPropertyValue]: Incorrect object type at '/myJob/ecscm_changeLogs': string[ecscm_changeLogs=BUG-1, BUG-2, BUG-99,id=50444]
+Trying to query for /myJob/ecscm_changeLogs as property...
+Using supplied prefix=BUG- to search for defects IDs
+Found defect ID: BUG-1
+Found defect ID: BUG-2
+Found defect ID: BUG-99
+Prefix: BUG-
+Defect ID: 2 
+Key: 2 Name: Bug ID: 2=The list of available flights is not given when departing and returning dates are the same, STATUS=Rejected
+Defect ID: 99 
+Key: 99 Name: Bug ID: 99 does not exist
+Defect ID: 1 
+Key: 1 Name: Bug ID: 1=The list of flights is given even when past date set as departing date, STATUS=Closed
+Creating link /commander/pages/EC-DefectTracking-QC-1.0.0.0/reports?jobId=3506
+action linkDefects returned: 
+ ";
+    
+    return $log;
+}
+

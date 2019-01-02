@@ -1,0 +1,246 @@
+# -*-Perl-*-
+
+# alm-UpdateDefects.ntest -
+#
+# Exercise procedure UpdateDefects in EC-DefectTracking-ALM
+#
+# Copyright (c) 2005-2010 Electric Cloud, Inc.
+# All rights reserved
+
+use strict;
+use ECTest;
+use ECSelenium;
+
+# read in setup and tests that are common to all EC-DefectTracking plugins 
+# system tests
+require "$::gTestFileDir/../../EC-DefectTracking/systemtest/ntest.common";
+
+ntest "cfgDoesNotExist", {}, sub {
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdcfgDoesNotExist();
+
+    writeFile("$::gCurrentTestDir/cfgDoesNotExist.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Could not find configuration cfgDoesNotExist", $data, "cfgDoesNotExist output");
+};
+
+sub runFakeCmdcfgDoesNotExist
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for cfgDoesNotExist ...
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Could not find configuration cfgDoesNotExist";
+    
+    return $log;
+}
+
+ntest "propertyDoesNotExist", {}, sub {
+    
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdpropertyDoesNotExist();
+
+    writeFile("$::gCurrentTestDir/propertyDoesNotExist.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Error querying for /myJob/propertyDoesNotExist as a property", $data, "propertyDoesNotExist output");
+};
+
+sub runFakeCmdpropertyDoesNotExist
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for qcConfig ...
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Error querying for /myJob/propertyDoesNotExist as a property";
+    
+    return $log;
+}
+
+ntest "propertyContainsInaccessibleDefectIDs", {}, sub {    
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdpropertyContainsInaccessibleDefectIDs();
+
+    writeFile("$::gCurrentTestDir/propertyContainsInaccessibleDefectIDs.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Key: 99 Name: Bug ID: 99 does not exist", $data, "propertyContainsInaccessibleDefectIDs output");
+}; 
+
+sub runFakeCmdpropertyContainsInaccessibleDefectIDs
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for default ...
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Parsing property /myJob/ecscm_changeLogs for defect IDs
+Error querying for /myJob/ecscm_changeLogs as a property sheet: error [InvalidPropertyValue]: Incorrect object type at '/myJob/ecscm_changeLogs': string[ecscm_changeLogs=BUG-1, BUG-2, BUG-99,id=50444]
+Trying to query for /myJob/ecscm_changeLogs as property...
+Using supplied prefix=BUG- to search for defects IDs
+Found defect ID: BUG-1
+Found defect ID: BUG-2
+Found defect ID: BUG-99
+Prefix: BUG-
+Defect ID: 2 
+Key: 2 Name: Bug ID: 2=The list of available flights is not given when departing and returning dates are the same, STATUS=Rejected
+Defect ID: 99 
+Key: 99 Name: Bug ID: 99 does not exist
+Defect ID: 1 
+Key: 1 Name: Bug ID: 1=The list of flights is given even when past date set as departing date, STATUS=Closed
+Creating link /commander/pages/EC-DefectTracking-QC-1.0.0.0/reports?jobId=3506
+action linkDefects returned: 
+ ";
+    
+    return $log;
+}
+
+ntest "propertyContainsOneDefectID", {}, sub {
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdpropertyContainsOneDefectID();
+
+    writeFile("$::gCurrentTestDir/propertyContainsOneDefectID.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Work Item Bug: 1 was successfully updated to Closed status", $data, "propertyContainsOneDefectID output");
+};
+
+sub runFakeCmdpropertyContainsOneDefectID
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for default ...
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Property : 1=Closed
+Current Pair: 1=Closed
+Current idDefect: 1
+Current valueDefect: Closed
+
+Work Item Bug: 1 was successfully updated to Closed status";
+    
+    return $log;
+}
+
+ntest "propertyContainsTwoDefectID", {}, sub {
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdpropertyContainsTwoDefectID();
+
+    writeFile("$::gCurrentTestDir/propertyContainsTwoDefectID.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Work Item Bug: 1 was successfully updated to Resolved status", $data, "propertyContainsTwoDefectID output");
+    assertSubstring("Work Item Bug: 2 was successfully updated to Closed status", $data, "propertyContainsTwoDefectID output");
+};
+
+sub runFakeCmdpropertyContainsTwoDefectID
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for default ...
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Property : 1=Resolved,2=Closed
+Current Pair: 1=Resolved
+Current idDefect: 1
+Current valueDefect: Resolved
+Work Item Bug: 1 was successfully updated to Resolved status
+ 
+Current Pair: 2=Closed
+Current idDefect: 2
+Current valueDefect: Closed
+Work Item Bug: 2 was successfully updated to Closed status
+ 
+ ";
+    
+    return $log;
+}
+
+ntest "closeDefectIssue", {}, sub {
+    
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdcloseDefectIssue();
+
+    writeFile("$::gCurrentTestDir/closeDefectIssue.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Work Item Bug: 2 was successfully updated to Closed status", $data, "closeDefectIssue output");
+};
+
+sub runFakeCmdcloseDefectIssue
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for default ...
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Property : 1=Resolved,2=Closed
+Current Pair: 1=Resolved
+Current idDefect: 1
+Current valueDefect: Resolved
+Work Item Bug: 1 was successfully updated to Resolved status
+ 
+Current Pair: 2=Closed
+Current idDefect: 2
+Current valueDefect: Closed
+Work Item Bug: 2 was successfully updated to Closed status";
+    
+    return $log;
+}
+
+ntest "propertyDefectIDAlreadyResolved", {}, sub {
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdpropertyDefectIDAlreadyResolved();
+
+    writeFile("$::gCurrentTestDir/propertyDefectIDAlreadyResolved.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Error: failed trying to update issue to Status: Closed", $data, "propertyDefectIDAlreadyResolved output");
+};
+
+sub runFakeCmdpropertyDefectIDAlreadyResolved
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for default ...
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Property : 1=Closed,2=Rejected,99=Active
+Current Pair: 1=Closed
+Current idDefect: 1
+Current valueDefect: Closed
+Error: failed trying to update issue to Status: Closed 
+Current Pair: 2=Rejected
+Current idDefect: 2
+Current valueDefect: Rejected
+Error: failed trying to update issue to Status: Rejected 
+Current Pair: 99=Active
+Current idDefect: 99
+Current valueDefect: Active
+Error: failed trying to udpate Work Item Bug: 99 does not exist 
+ 
+Creating link /commander/pages/EC-DefectTracking-QC-1.0.0.0/reports?jobId=3509
+action updateDefects returned: 0";
+    
+    return $log;
+}
+
+ntest "propertyFormatError", {}, sub {    
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdpropertyFormatError();
+
+    writeFile("$::gCurrentTestDir/propertyFormatError.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Error: Property format error", $data, "propertyFormatError output");
+};
+
+sub runFakeCmdpropertyFormatError
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for qcConfig ...
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Property : BUG026
+Current Pair: BUG026
+Current idDefect: BUG026
+Current valueDefect: 
+Error: Property format error
+action updateDefects returned:";
+    
+    return $log;
+}

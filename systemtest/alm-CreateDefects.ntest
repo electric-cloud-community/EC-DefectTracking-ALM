@@ -1,0 +1,172 @@
+# -*-Perl-*-
+
+# alm-CreateDefects.ntest
+#
+# Exercise procedure CrateDefects in EC-DefectTracking-ALM
+#
+# Copyright (c) 2005-2010 Electric Cloud, Inc.
+# All rights reserved
+
+use strict;
+use ECTest;
+use ECSelenium;
+
+# read in setup and tests that are common to all EC-DefectTracking plugins 
+# system tests
+require "$::gTestFileDir/../../EC-DefectTracking/systemtest/ntest.common";
+
+$::gProjectImported = 0;
+$::gConfigCreated = 0;
+
+ntest "cfgDoesNotExist", {}, sub {
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdcfgDoesNotExist();
+
+    writeFile("$::gCurrentTestDir/cfgDoesNotExist.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Could not find configuration cfgDoesNotExist", $data, "cfgDoesNotExist output");
+};
+
+sub runFakeCmdcfgDoesNotExist
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for cfgDoesNotExist ...
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Could not find configuration cfgDoesNotExist";
+    
+    return $log;
+}
+
+ntest "noDefectsToCreate", {}, sub {
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdnoDefectsToCreate();
+
+    writeFile("$::gCurrentTestDir/noDefectsToCreate.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("No Errors, so no Defects to create", $data, "noDefectsToCreate output");
+};
+
+sub runFakeCmdnoDefectsToCreate
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for TFSCfgTestServer ...
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+No Errors, so no Defects to create
+action createDefects returned: 0";
+    
+    return $log;
+}
+
+ntest "propertiesContainsOneDefect", {}, sub {
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdpropertiesContainsOneDefect();
+
+    writeFile("$::gCurrentTestDir/propertiesContainsOneDefect.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Issue Created with ID:", $data, "propertiesContainsOneDefect output");
+};
+
+sub runFakeCmdpropertiesContainsOneDefect
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for default ...
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Trying to get Property /myJob/ecTestFailures/Step23663-testBlockUnblock 
+Reference found where even-sized list expected at (eval 36) line 316.
+Issue Created with ID: 78
+ 
+Creating link /commander/pages/EC-DefectTracking-QC-1.0.0.0/reports?jobId=3550
+action createDefects returned:";
+    
+    return $log;
+}
+
+ntest "propertiesContainsTwoDefects", {}, sub {
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdpropertiesContainsTwoDefects();
+
+    writeFile("$::gCurrentTestDir/propertiesContainsTwoDefects.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Trying to get Property /myJob/ecTestFailures/Step23663-testBlockUnblock", $data, "propertiesContainsTwoDefects output");
+    assertSubstring("Trying to get Property /myJob/ecTestFailures/Step23663-testBlockUnblock2", $data, "propertiesContainsTwoDefects output");
+};
+
+sub runFakeCmdpropertiesContainsTwoDefects
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for default ...
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Trying to get Property /myJob/ecTestFailures/Step23663-testBlockUnblock 
+Reference found where even-sized list expected at (eval 36) line 316.
+Issue Created with ID: 78
+ 
+Trying to get Property /myJob/ecTestFailures/Step23663-testBlockUnblock2 
+Reference found where even-sized list expected at (eval 36) line 316.
+Issue Created with ID: 79
+ 
+Creating link /commander/pages/EC-DefectTracking-QC-1.0.0.0/reports?jobId=3550
+action createDefects returned:";
+    
+    return $log;
+}
+
+ntest "reportLinkCreated", {}, sub {
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdreportLinkCreated();
+
+    writeFile("$::gCurrentTestDir/reportLinkCreated.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Creating link /commander/pages/EC-DefectTracking-QC-", $data, "reportLinkCreated output");
+};
+
+sub runFakeCmdreportLinkCreated
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for default ...
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.1.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Trying to get Property /myJob/ecTestFailures/Step23663-testBlockUnblock 
+Reference found where even-sized list expected at (eval 36) line 316.
+Issue Created with ID: 78
+ 
+Trying to get Property /myJob/ecTestFailures/Step23663-testBlockUnblock2 
+Reference found where even-sized list expected at (eval 36) line 316.
+Issue Created with ID: 79
+ 
+Creating link /commander/pages/EC-DefectTracking-QC-1.0.0.0/reports?jobId=3550
+action createDefects returned:";
+    
+    return $log;
+}
+
+ntest "reportLinkCreatedManual", {}, sub {
+
+    # Read the log file and verify its contents.
+    my $data = runFakeCmdreportLinkCreatedManual();
+
+    writeFile("$::gCurrentTestDir/reportLinkCreatedManual.log","====Job Details====\n====LOG====\n$data\n");
+
+    assertSubstring("Creating link /commander/pages/EC-DefectTracking-QC-", $data, "reportLinkCreatedManual output");
+};
+
+sub runFakeCmdreportLinkCreatedManual
+{
+    my $log= "Getting ECDefectTracking bootstrap code from /myProject/procedure_helpers/bootstrap
+Running boostrap for TFSCfgTestServer ...
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Cfg..
+Loading /plugins/EC-DefectTracking-1.1.0.0/project/defectTracking_driver/ECDefectTracking::Base::Driver..
+Trying to get Property /myJob/ecTestFailures/Step35469-testBlockUnblock 
+Creating link /commander/pages/EC-DefectTracking-QC-1.0.0.0/reports?jobId=6015
+action createDefects returned: ";    
+
+    return $log;
+}
