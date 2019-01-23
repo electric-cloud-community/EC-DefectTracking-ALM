@@ -3,7 +3,13 @@
   <exportPath>/projects/@PLUGIN_KEY@-@PLUGIN_VERSION@</exportPath>
   <project>
     <projectName>@PLUGIN_KEY@-@PLUGIN_VERSION@</projectName>
-    <propertySheet>      
+    <propertySheet>
+      <!-- Improvement for ECPDEFECTTRACKINGALM-7 -->
+      <property>
+        <propertyName>ec_icon</propertyName>
+        <value>images/icon-plugin.svg</value>
+      </property>
+      <!-- End of improvement for ECPDEFECTTRACKINGALM-7 -->
       <property>
         <propertyName>ec_setup</propertyName>
         <value></value>
