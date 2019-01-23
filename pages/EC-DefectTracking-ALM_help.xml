@@ -21,7 +21,7 @@
     <p>Plugin Version @PLUGIN_VERSION@</p>
     <hr style=
     "margin-left: -10px; margin-top: 10px; height: 1px; width: 100%; color: #5981BD;"
-    noshade="noshade" />		<p>Revised on July 1, 2015</p>	<h1>Contents</h1>	<ul>	<li><p><a href="#overview">Overview</a></p></li>	<li><p><a href="#procedures">Plugin Procedures</a></p></li>	<li><p><a href="#example">Examples and Use Cases</a></p></li>	<li><p><a href="#rns">Release Notes</a></p></li>	</ul>	<h1 id="overview">Overview</h1>
+    noshade="noshade" />		<p>Revised on January 23, 2019</p>	<h1>Contents</h1>	<ul>	<li><p><a href="#overview">Overview</a></p></li>	<li><p><a href="#procedures">Plugin Procedures</a></p></li>	<li><p><a href="#example">Examples and Use Cases</a></p></li>	<li><p><a href="#rns">Release Notes</a></p></li>	</ul>	<h1 id="overview">Overview</h1>
     <!-- The tool description should answer these kinds of questions:
     What is the tool itself is used for in the development
     process? Who would use this tool? What is the general use-case or
@@ -315,7 +315,12 @@
 
     <h2>ALM Report Example</h2><img src=
     "../../plugins/@PLUGIN_KEY@/images/DefectALM-06.png" alt="" />
-	<h1 id="rns">Release Notes</h1>	<h2>@PLUGIN_KEY@-1.0.5</h2>    <ul>        <li>ElectricCommander was renamed to ElectricFlow.</li>    </ul>	
+	<h1 id="rns">Release Notes</h1>
+
+    <h2>@PLUGIN_KEY@-1.0.6</h2>
+    <ul>
+        <li>The plugin icon has been updated.</li>
+    </ul>	<h2>@PLUGIN_KEY@-1.0.5</h2>    <ul>        <li>ElectricCommander was renamed to ElectricFlow.</li>    </ul>	
     <h2>@PLUGIN_KEY@-1.0.4</h2>
     <ul>
         <li>Procedure names were changed in the step picker section.</li>
